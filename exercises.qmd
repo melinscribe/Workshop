@@ -2,7 +2,7 @@
 title: "Exercises"
 format:
   html:
-    code-tools: true 
+   # code-tools: true 
     theme: cosmo
 execute:
   echo: true
