@@ -4,6 +4,8 @@ description: "Workshop on Information Visualization for Social Scientists"
 author: "[Melanie Sauter](mailto:melanie.sauter@uni-mannheim.de)"
 ---
 
+
+
 Welcome to this workshop on information visualization and advanced graphics in R.
 
 Information visualization, the art of representing data in a way that it is easy to understand and to manipulate, can help us make sense of information and thus make it useful in our lives. There’s a huge need for data to be presented so that it is understood by experts and non-experts alike.
