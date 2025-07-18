@@ -1,0 +1,15 @@
+---
+title: "Advanced Graphics"
+description: "Workshop on Information Visualization for Social Scientists"
+author: "[Melanie Sauter](mailto:melanie.sauter@uni-mannheim.de)"
+---
+
+Welcome to this workshop on information visualization and advanced graphics in R.
+
+Information visualization, the art of representing data in a way that it is easy to understand and to manipulate, can help us make sense of information and thus make it useful in our lives. There’s a huge need for data to be presented so that it is understood by experts and non-experts alike.
+
+Some of the most famous information visualizations are maps of Underground/Subway systems. The geography above ground is very different to the way it is shown on the underground map. However, it enables pretty much anyone to quickly understand how to get from one point in the city to any other using the underground system.
+
+Information visualization is designed to help us make sense out of data. It can be used to explore relationships between data, to confirm ideas we hold about data or to explain data in easy to digest manners. It may also be used, rightly or wrongly, to help persuade someone with data.
+
+This workshop is an introduction to the principles and techniques for visualizing data. The course first and foremost is aimed at making researchers aware of “good” and “bad” visualizations. Participants learn the principles of how to visualize complex matters into readable charts and graphs.

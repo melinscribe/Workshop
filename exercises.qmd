@@ -1,0 +1,28 @@
+---
+title: "Exercises"
+format:
+  html:
+    code-tools: true  # ✅ Enables runnable/editable chunks
+    theme: cosmo
+execute:
+  echo: true
+  eval: true
+---
+
+Download this `quarto` file with exercises.
+
+## ✍️ Exploring Gapminder
+
+The following exercises help you explore real-world development data using `ggplot2` and `gapminder`.
+
+------------------------------------------------------------------------
+
+## 🧠 Challenge Exercise: Explore a Development Pattern
+
+Before seeing any example plots, try to visualize the following:
+
+> **How does a country's population size relate to life expectancy and income level?**
+
+**Your task**: Create a visualization using the `gapminder` dataset for the year **2007** that captures the relationship between: - `lifeExp`: Life expectancy - `gdpPercap`: GDP per capita - `pop`: Population
+
+You may use any type of plot or mapping of variables (e.g. color, size), but **aim to show all three variables clearly**.

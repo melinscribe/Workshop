@@ -1,0 +1,29 @@
+project:
+  type: website
+
+website:
+  title: "Advanced Graphics"
+  description: "Workshop Information Visualization for Social Scientists"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - colors.qmd
+      - fonts.qmd
+      - technicalities.qmd
+      - visualization.qmd
+      - regressions.qmd
+      - exercises.qmd
+
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    code-fold: true
+    link-external-newwindow: true
+
+
+editor: visual
+
