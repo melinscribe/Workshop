@@ -7,7 +7,7 @@ website:
   description: "Workshop Information Visualization for Social Scientists"
   navbar:
     left:
-      - href: home.qmd
+      - href: index.qmd
         text: Home
       - colors.qmd
       - fonts.qmd

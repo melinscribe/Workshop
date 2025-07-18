@@ -537,23 +537,23 @@ ggplot() +
 
 ```{r, eval=F}
 # bounding box of where we want to query data
-q <- opq(bbox = st_bbox(st_transform(germany, 25832)))
+#q <- opq(bbox = st_bbox(st_transform(germany, 25832)))
 
 # First build the query of location of prisons
-osmq <- add_osm_feature(q, key = "amenity", value = "prison")
+#osmq <- add_osm_feature(q, key = "amenity", value = "prison")
 
 # And then query the data
-pris.osm <- osmdata_sf(osmq)
+#pris.osm <- osmdata_sf(osmq)
 
 
 # Make unique points / polygons
-pris.osm <- unique_osmdata(pris.osm)
+#pris.osm <- unique_osmdata(pris.osm)
 
 # Get points and polygons 
 pris.points <- pris.osm$osm_points
 
 # # Drop OSM file
- rm(pris.osm); gc()
+ #rm(pris.osm); gc()
 
 ```
 
