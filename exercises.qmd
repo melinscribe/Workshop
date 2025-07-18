@@ -9,7 +9,7 @@ execute:
   eval: true
 ---
 
-Download this [`quarto`](https://melinscribe.github.io/Workshop/exercises/exercises_R.qmd) file with exercises.
+Download this [`quarto`](https://github.com/melinscribe/Workshop/blob/main/exercises/exercises_R.qmd) file with exercises.
 
 
 ## ✍️ Exploring Gapminder
