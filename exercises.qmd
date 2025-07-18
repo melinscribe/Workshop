@@ -2,14 +2,15 @@
 title: "Exercises"
 format:
   html:
-    code-tools: true  # ✅ Enables runnable/editable chunks
+    code-tools: true 
     theme: cosmo
 execute:
   echo: true
   eval: true
 ---
 
-Download this `quarto` file with exercises.
+Download this [`quarto`](https://melinscribe.github.io/Workshop/exercises/exercises_R.qmd) file with exercises.
+
 
 ## ✍️ Exploring Gapminder
 
