@@ -405,7 +405,6 @@ Stores data in **grids/cells**, such as satellite imagery, elevation, or tempera
 -   **Object class:** `SpatRaster` (in {terra}) or RasterLayer (older {raster})
 -   **Package:** {terra} (modern), {raster} (legacy)
 
-
 Extract world map
 
 ```{r, message=F}
@@ -419,14 +418,10 @@ library(osmdata)
 world <- ne_countries(scale = "medium", returnclass = "sf")
 ```
 
-
-
-ggplot vs. base plot 
+ggplot vs. base plot
 
 ::::: columns
 ::: {.column width="50%"}
-
-
 ```{r, message=F}
 # Plot base map
 ggplot(world) +
@@ -434,21 +429,16 @@ ggplot(world) +
   labs(title = "World Countries Map") +
   theme_minimal()
 ```
-
-
 :::
 
 ::: {.column width="50%"}
-
-
 ```{r, message=F}
 plot(world$geometry)
 ```
-
 :::
 :::::
 
- Map a Continuous Variable (GDP per Capita)
+Map a Continuous Variable (GDP per Capita)
 
 ```{r, message=F}
 
@@ -534,37 +524,71 @@ ggplot() +
 
 ## Overlay on OpenStreetMaps (OSM)
 
+In this example, we scrape prison locations from OSM and map den on an interactive map. 
 
 ```{r, eval=F}
 # bounding box of where we want to query data
-#q <- opq(bbox = st_bbox(st_transform(germany, 25832)))
+q <- opq(bbox = st_bbox(st_transform(germany, 4326)))
+ger <- opq(bbox = "Germany")
 
 # First build the query of location of prisons
-#osmq <- add_osm_feature(q, key = "amenity", value = "prison")
+osmq <- add_osm_feature(ger, key = "amenity", value = "prison")
 
 # And then query the data
-#pris.osm <- osmdata_sf(osmq)
-
+pris.osm <- osmdata_sf(osmq)
 
 # Make unique points / polygons
-#pris.osm <- unique_osmdata(pris.osm)
+pris.osm <- unique_osmdata(pris.osm)
 
-# Get points and polygons 
-pris.points <- pris.osm$osm_points
 
-# # Drop OSM file
- #rm(pris.osm); gc()
+# filter only points within Germany
+pris.points <- pris.osm$osm_points |> 
+  st_as_sf() |> 
+  st_filter(germany)
+
+# Get polygons 
+poly <- pris.osm$osm_polygons |> 
+  st_as_sf() |> 
+  st_filter(germany)
+
+multipoly <- pris.osm$osm_multipolygons |> 
+  st_as_sf() |>   st_make_valid() |>
+  st_filter(germany)
+
+
+# Harmonize columns (keep only common ones, or add missing if needed)
+common_cols <- intersect(names(pris.points), names(poly)) |> 
+  intersect(names(multipoly))
+
+pris.points <- pris.points[, common_cols]
+poly <- poly[, common_cols]
+multipoly <- multipoly[, common_cols]
+
+# Combine all into one spatial layer
+pris_all <- bind_rows(pris.points, poly, multipoly)
+
+
+# Convert polygons and multipolygons to centroids
+poly_pts <- st_centroid(poly)
+multipoly_pts <- st_centroid(multipoly)
+
+# Combine all as point geometries
+pris_all <- bind_rows(pris.points, poly_pts, multipoly_pts)
+
 
 ```
 
 ```{r, echo=FALSE}
-pris.points <- readRDS("data/prisons.rds")
+# I saved the previous chunk as RDS for faster rendering
+#saveRDS(pris_all, "data/prisons.rds")
+
+pris_all <- readRDS("data/prisons.rds")
 ```
 
 ```{r}
-mapview(st_geometry(pris.points))
-```
 
+mapview(pris_all, zcol = "name", legend = FALSE)
+```
 
 # Nighttime lights
 
