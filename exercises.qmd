@@ -23,6 +23,10 @@ Before seeing any example plots, try to visualize the following:
 
 > **How does a country's population size relate to life expectancy and income level?**
 
-**Your task**: Create a visualization using the `gapminder` dataset for the year **2007** that captures the relationship between: - `lifeExp`: Life expectancy - `gdpPercap`: GDP per capita - `pop`: Population
+**Your task**: Create a visualization using the `gapminder` dataset for the year **2007** that captures the relationship between:
+
+-   `lifeExp`: Life expectancy
+-   `gdpPercap`: GDP per capita
+-   `pop`: Population
 
 You may use any type of plot or mapping of variables (e.g. color, size), but **aim to show all three variables clearly**.

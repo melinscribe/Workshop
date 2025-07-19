@@ -2,6 +2,8 @@
 title: "Applied Examples"
 ---
 
+First, load the packages required for the examples. 
+
 ```{r, output=F, message=F}
 library(ggplot2)
 library(dplyr)
@@ -11,9 +13,7 @@ library(ggeffects)
 library(patchwork)
 library(viridis)
 
-
 #devtools::install_github("vdeminstitute/vdemdata")
-
 library(vdemdata)
 ```
 
@@ -187,8 +187,27 @@ What is the effect of liberal democracy on GDP?
 
 ols <- lm(e_gdppc ~ v2x_libdem+v2x_corr+ as.factor(e_regionpol_6C), data = vdem)
 
-
 broom::tidy(ols, conf.int = TRUE) %>%
+  mutate(term = recode(term,
+    "v2x_libdem" = "Liberal Democracy",
+    "v2x_corr" = "Corruption Control",
+    "as.factor(e_regionpol_6C)2" = "Latin America & Caribbean",
+    "as.factor(e_regionpol_6C)3" = "Middle East & North Africa",
+    "as.factor(e_regionpol_6C)4" = "Sub-Saharan Africa",
+    "as.factor(e_regionpol_6C)5" = "Western Europe & North America",
+    "as.factor(e_regionpol_6C)6" = "Asia & Pacific"
+    # Region 1 is the reference category — not shown in output
+  ))%>%
+  mutate(term = factor(term, levels = rev(c(
+    "Liberal Democracy",
+    "Corruption Control",
+    "Latin America & Caribbean",
+    "Middle East & North Africa",
+    "Sub-Saharan Africa",
+    "Western Europe & North America",
+        "Asia & Pacific",
+        "(Intercept)"
+  )))) %>%
   ggplot(aes(x = estimate, y = term)) +
   geom_point() +
   geom_errorbar(aes(xmin = conf.low, xmax = conf.high), width = 0.2) +
@@ -199,6 +218,11 @@ broom::tidy(ols, conf.int = TRUE) %>%
   theme_minimal()
 
 ```
+
+- In `ggplot2`, the order of categorical variables on axes follows the factor level order.
+- `recode()` changes the labels; `factor(..., levels = ...)` sets the plotting order.
+
+
 
 ### Predicted Values (OLS)
 
@@ -222,7 +246,8 @@ ggplot(freexp_preds, aes(x = x, y = predicted)) +
 
 -   Predictions follow the functional form you impose (e.g., linear relationship, additive terms).
 
--   Based on estimated coefficients, it calculates:
+
+Based on estimated coefficients, it calculates:
 
 -   Fitted/predicted values
 
@@ -253,19 +278,17 @@ ggplot(vdem_clean, aes(x = v2x_libdem, y =e_gdppc)) +
 ### Predicted Values by Region (OLS)
 
 ```{r}
-
-freexp_preds <- predict_response(ols, terms = c("e_regionpol_6C"))
-
+    
 ggplot(freexp_preds, aes(x = as.factor(x), y = predicted)) +
   geom_point()+
   geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2) +
   coord_flip() +
 scale_x_discrete(labels = c(
-    "1" = "Western Europe & North America",
-    "2" = "Eastern Europe & Central Asia",
-    "3" = "Latin America & Caribbean",
+    "1" = "Eastern Europe & Central Asia",
+    "2" = "Latin America & Caribbean",
+    "3" = "Middle East & North Africa",
     "4" = "Sub-Saharan Africa",
-    "5" = "Middle East & North Africa",
+    "5" = "Western Europe & North America",
     "6" = "Asia & Pacific"
   )) +   scale_y_continuous(limits = c(0, 60)) +
   labs(
@@ -285,11 +308,11 @@ scale_x_discrete(labels = c(
 freexp_preds <- predict_response(ols, terms = c("v2x_libdem", "e_regionpol_6C"))
 
 region_labels <- c(
-  "1" = "Western Europe & North America",
-  "2" = "Eastern Europe & Central Asia",
-  "3" = "Latin America & Caribbean",
+  "1" = "Eastern Europe & Central Asia",
+  "2" = "Latin America & Caribbean",
+  "3" = "Middle East & North Africa",
   "4" = "Sub-Saharan Africa",
-  "5" = "Middle East & North Africa",
+  "5" = "Western Europe & North America",
   "6" = "Asia & Pacific"
 )
 
@@ -314,7 +337,27 @@ logit_model <- glm(democracy_binary ~ v2x_jucon + v2x_corr  + as.factor(e_region
                    data = vdem, family = binomial)
 
 
-broom::tidy(logit_model, conf.int = TRUE) %>%
+broom::tidy(logit_model, conf.int = TRUE)%>%
+  mutate(term = recode(term,
+    "v2x_jucon" = "Judicial Constraints",
+    "v2x_corr" = "Corruption Control",
+    "as.factor(e_regionpol_6C)2" = "Latin America & Caribbean",
+    "as.factor(e_regionpol_6C)3" = "Middle East & North Africa",
+    "as.factor(e_regionpol_6C)4" = "Sub-Saharan Africa",
+    "as.factor(e_regionpol_6C)5" = "Western Europe & North America",
+    "as.factor(e_regionpol_6C)6" = "Asia & Pacific"
+    # Region 1 is the reference category — not shown in output
+  )) %>%
+  mutate(term = factor(term, levels = rev(c(
+    "Judicial Constraints",
+    "Corruption Control",
+    "Latin America & Caribbean",
+    "Middle East & North Africa",
+    "Sub-Saharan Africa",
+    "Western Europe & North America",
+    "Asia & Pacific",
+    "(Intercept)"
+  )))) %>%
   ggplot(aes(x = estimate, y = term)) +
   geom_point() +
   geom_errorbar(aes(xmin = conf.low, xmax = conf.high), width = 0.2) +
@@ -486,7 +529,9 @@ plot(st_geometry(germany))
 
 ```
 
-Interactive viewing of spatial objects in R
+### Interactive viewing of spatial objects in R
+
+Map population estimates per country
 
 ```{r}
 mapview(world, zcol ="pop_est")
@@ -494,7 +539,7 @@ mapview(world, zcol ="pop_est")
 
 ### Mapping of geocoded data
 
-Map Geocoded Event Locations on U.S. Map
+Map geocoded event locations on U.S. Map
 
 ```{r, message=F}
 ### 🧪 Simulate and Map Protest Events Inside U.S. State Borders
@@ -502,7 +547,7 @@ us <- rnaturalearth::ne_countries(scale = "medium", returnclass = "sf") %>%
   filter(admin == "United States of America")
 
 
-# Simulate more random points inside bounding box
+# Simulate random points inside bounding box
 set.seed(123)
 n_events <- 1000
 raw_points <- tibble(
@@ -534,35 +579,64 @@ ggplot() +
 
 ## Overlay on OpenStreetMaps (OSM)
 
+In this example, we scrape prison locations from OSM and map den on an interactive map.
+
+First, get and prepare the data.
 
 ```{r, eval=F}
 # bounding box of where we want to query data
-#q <- opq(bbox = st_bbox(st_transform(germany, 25832)))
+q <- opq(bbox = st_bbox(st_transform(germany, 4326)))
+ger <- opq(bbox = "Germany")
 
-# First build the query of location of prisons
+# Build the query of location of prisons
 #osmq <- add_osm_feature(q, key = "amenity", value = "prison")
+osmq <- add_osm_feature(ger, key = "amenity", value = "prison")
 
 # And then query the data
-#pris.osm <- osmdata_sf(osmq)
-
+pris.osm <- osmdata_sf(osmq)
 
 # Make unique points / polygons
-#pris.osm <- unique_osmdata(pris.osm)
+pris.osm <- unique_osmdata(pris.osm)
 
 # Get points and polygons 
 pris.points <- pris.osm$osm_points
+# filter only points within Germany
+pris.points <- pris.osm$osm_points |> 
+  st_as_sf() |> 
+  st_filter(germany)
+# Get polygons 
+poly <- pris.osm$osm_polygons |> 
+  st_as_sf() |> 
+  st_filter(germany)
+multipoly <- pris.osm$osm_multipolygons |> 
+  st_as_sf() |>   st_make_valid() |>
+  st_filter(germany)
+# Harmonize columns (keep only common ones, or add missing if needed)
+common_cols <- intersect(names(pris.points), names(poly)) |> 
+  intersect(names(multipoly))
 
-# # Drop OSM file
- #rm(pris.osm); gc()
+pris.points <- pris.points[, common_cols]
+poly <- poly[, common_cols]
+multipoly <- multipoly[, common_cols]
+
+# Convert polygons and multipolygons to centroids
+poly_pts <- st_centroid(poly)
+multipoly_pts <- st_centroid(multipoly)
+# Combine all as point geometries
+pris_all <- bind_rows(pris.points, poly_pts, multipoly_pts)
 
 ```
-
 ```{r, echo=FALSE}
-pris.points <- readRDS("data/prisons.rds")
+# I saved the previous chunk as RDS for faster rendering
+#saveRDS(pris_all, "data/prisons.rds")
+
+pris_all <- readRDS("data/prisons.rds")
 ```
+
+Map the data. Specify the indicator with `zcol = " "`
 
 ```{r}
-mapview(st_geometry(pris.points))
+mapview(pris_all, zcol = "name", legend = FALSE)
 ```
 
 
