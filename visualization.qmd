@@ -192,7 +192,6 @@ GDP vs Life Expectancy
 - `lifeExp`: *Life expectancy*
 
 **Why this plot**:\
-A scatter plot reveals **Why this plot**:\
 A **scatter plot** is ideal for visualizing the relationship between two continuous variables. Here, we see the relationship between income and health outcomes in each country.
 
 ```{r}
